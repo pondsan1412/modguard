@@ -3,3 +3,7 @@ reactions_roles = {
     '<:MK8D:1113905697659289651>': 'Mario Kart'
     # Add more emoji and role mappings as needed
 }
+discord_channel_network_community = {
+    'debugging_channel':0,
+    'reques_role':0
+}

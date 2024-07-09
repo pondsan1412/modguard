@@ -2,7 +2,7 @@ import random
 import discord
 from discord.ext import commands
 import secret_stuff
-
+import variables 
 class pull_variables():
     def __init__(self,token:str):
         self.token = token
@@ -13,3 +13,9 @@ class pull_variables():
     def fetch_boolean(bool)-> bool:
         return bool
 
+class role_class:
+    def __init__(self):
+        pass
+    
+    def callback_integer_from_dic(integer)-> int:
+        return integer

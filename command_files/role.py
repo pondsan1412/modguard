@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from modules.variables import reactions_roles
+from modules import function,variables
 
 class ReactionRole(commands.Cog):
     def __init__(self, bot: commands.Bot,message_id=0):
@@ -40,8 +41,9 @@ class ReactionRole(commands.Cog):
             
         await ctx.send("Reaction roles setup complete.")
 
+
     async def check_channel(self, payload: discord.RawReactionActionEvent) -> bool:
-        reaction_channel_id = 1163800972867416064
+        reaction_channel_id = function.role_function.call_integer_from_dic(dicname=variables.channels_id.get('discussion_channel'))
         if payload.channel_id != reaction_channel_id:
             return False
         
