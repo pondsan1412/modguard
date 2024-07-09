@@ -6,7 +6,7 @@ ModGuard is a versatile and robust Discord bot designed to manage and safeguard 
 
 - **Automated Moderation**: Detect and address spam, inappropriate content, Impolite words, and rule violations automatically.
 - **translator**: right click which messages you want to translated to english
-
+- **Role management**: 
 ## Getting Started
 
 1. **Invite ModGuard to your server**: [Invite Link Not Ready](#)
