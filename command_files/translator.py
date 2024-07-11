@@ -9,6 +9,8 @@ class translator(commands.Cog):
         pass
     async def tracking_message(self,msg:discord.Message):
         pass
+    async def callback_id(self)->int:
+        return 0
 
 async def setup(bot):
     await bot.add_cog(translator(bot))
