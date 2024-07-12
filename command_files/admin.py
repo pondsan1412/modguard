@@ -5,7 +5,7 @@ import aiohttp
 class Admin_(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-
+    
     async def check_role(self, ctx: commands.Context):
         role_guild = discord.utils.get(ctx.guild.roles, name="Admin")
         if role_guild is None or role_guild not in ctx.author.roles:
