@@ -22,6 +22,7 @@ class modguard(commands.Bot):
         super().__init__(command_prefix=get_prefix, intents=call_intents())
 
     async def on_ready(self):
+        await self.tree.sync()
         async with aiosqlite.connect('prefixes.db') as db:
             await db.execute('''
                 CREATE TABLE IF NOT EXISTS prefixes (
