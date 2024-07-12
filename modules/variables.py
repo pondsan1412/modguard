@@ -1,7 +1,7 @@
 #dictionary
 reactions_roles = {
     
-    '<:PC:1260171697357590528>': 'PC (Nvidia/AMD/Free Games)',
+    '<:PC:1260171697357590528>': 'PC',
     '<:Minecraft:1260169501924786196>': 'Minecraft',
     '<:Palworld:1260169499974307862>': 'Palworld',
     '<:Valheim:1260169710087966741>': 'Valheim',
@@ -27,7 +27,8 @@ reactions_roles = {
     '<:Multiversus:1260169341022765078>': 'Multiversus',
     '<:LethalCompany:1260169340339359785>': 'Lethal Company',
     '<:GarrysMod:1260169339445968967>': "Garry's Mod",
-    '<:Back4Blood:1260169762516766793>': 'Back 4 Blood'
+    '<:Back4Blood:1260169762516766793>': 'Back 4 Blood',
+    '<:TheDivision2:1260892162451705906>': 'The Division 2'
 }
 
 
