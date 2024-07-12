@@ -16,14 +16,14 @@ class context(commands.Cog):
     async def cog_unload(self) -> None:
         self.bot.tree.remove_command(self.ctx_menu.name, type=self.ctx_menu.type)
 
-    async def tl(self,i:discord.Interaction,*, msg:discord.Message):
+    async def tl(self,i:discord.Interaction, msg:discord.Message):
         translator = EasyGoogleTranslate(
         source_language='auto',
         target_language='en',
         timeout=None
         )
-        result = translator.translate(msg)
-        await i.response.send_message(content=result)
+        result = translator.translate(text=msg.content)
+        await i.response.send_message(result)
     
 async def setup(bot):
     await bot.add_cog(
