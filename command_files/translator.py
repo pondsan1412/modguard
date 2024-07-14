@@ -50,15 +50,21 @@ class context(commands.Cog):
                 return lang_detected
         
         #feature tracking message to translate
+        
+
         language_ch = "「🌏💬」𝓛𝓪𝓷𝓰𝓾𝓪𝓰𝓮"
         if message.channel.name == language_ch:
             if function.switch_button.check_switch() != True:
                 return
             else:
-                if not detect_lang(message.content):return
-                translated = await self.translator(message=message.content)
-                cleaned_message = re.sub(r'<[@#]\d+>', '', message.content)
+                if not detect_lang(message.content):
+                    return
+                
+                cleaned_message = re.sub(r':\w+:', '', message.content)
+                translated = await self.translator(message=cleaned_message)
+                cleaned_message = re.sub(r'<[@#]\d+>', '', cleaned_message)
                 await message.channel.send(f"`{cleaned_message}: {translated}`")
+
 
 
     @commands.hybrid_command()
