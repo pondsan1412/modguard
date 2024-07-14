@@ -4,8 +4,8 @@ from discord import app_commands,Embed
 from easygoogletranslate import EasyGoogleTranslate
 from googletrans import Translator
 import discord.utils
-from modules import switch_,function
-from modules import variables
+from modules import function
+
 import re
 class context(commands.Cog):
     def __init__(self, bot:commands.Bot):
@@ -59,13 +59,20 @@ class context(commands.Cog):
                 # ลบอีโมจิที่อยู่ในรูปแบบ :emoji_name: หรือ :number: หรือ <:number>
                 
                 translated = await self.translator(message=message.content)
-                cleaned_message = re.sub(r':[a-zA-Z0-9_]+:|<:\d+>', '', message.content)
-                await message.channel.send(f"jump to messasge > {message.jump_url} \n`{translated}`")
-
-
+                extracted, remaining = function.message.extract_message(message=translated)
+                print(extracted,remaining)
+                
+                extracted_emoji, remaining_emoji = function.message.extract_custom_emoji(message=remaining)
+                if extracted == ":pepost:":
+                    return
+                else:
+                    await message.channel.send(f"jump to messasge > {message.jump_url} \n{extracted}`{remaining_emoji}`")
 
     @commands.hybrid_command()
     async def switch_button_for_translator(self,ctx:commands.Context):
+        if not await function.check_role(self=self,ctx=ctx):
+            return
+        
         await ctx.send(view=switch_button())
         
 class switch_button(discord.ui.View):
