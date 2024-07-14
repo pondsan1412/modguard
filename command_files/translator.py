@@ -25,6 +25,18 @@ class context(commands.Cog):
         result = translator.translate(text=msg.content)
         await i.response.send_message(result)
     
+    @commands.hybrid_command()
+    async def switch_button_for_translator(self,ctx:commands.Context):
+        pass
+
+class switch_button(discord.ui.View):
+    def __init__(self,timeout=None):
+        super().__init__(timeout=timeout)
+
+    @discord.ui.button(label='on',style=discord.ButtonStyle.green)
+    async def setup_button_on(self,ctx:discord.Interaction,button:discord.ui.Button):
+        await ctx.response.send_message('hi')
+
 async def setup(bot):
     await bot.add_cog(
         context(bot)
