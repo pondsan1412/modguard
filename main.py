@@ -32,8 +32,6 @@ class modguard(commands.Bot):
         elif message.content =='True':
            switch_.tracking_message = True
            
-
-    
     async def update_recent_button(self):
         channel = self.get_channel(variables.switch_translate_ch)
         message = await channel.fetch_message(variables.default_switch_message_id)
