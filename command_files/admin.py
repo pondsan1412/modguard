@@ -29,7 +29,7 @@ class Admin_(commands.Cog):
     async def steal_pfp(self,ctx:commands.Context,user:discord.User):
         if not await self.check_role(ctx=ctx):return
         steal = user.avatar.url
-        await ctx.send(content=f'steal')
+        await ctx.send(content=f'{steal}')
 
     @commands.hybrid_command()
     async def set_pfp(self, ctx: commands.Context, url: str):
