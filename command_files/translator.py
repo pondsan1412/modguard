@@ -29,13 +29,10 @@ class context(commands.Cog):
         await i.response.send_message(result)
 
     async def translator(self, message: str) -> str:
-        cleaned_message = re.sub(r'<[@#]\d+>', '', message)
         trans = EasyGoogleTranslate(source_language='auto', target_language='en', timeout=None)
-        translated = trans.translate(text=cleaned_message)
+        translated = trans.translate(text=message)
         return translated
 
-    
-        
 
     @commands.Cog.listener()
     async def on_message(self,message:discord.Message):
@@ -59,10 +56,11 @@ class context(commands.Cog):
             else:
                 if not detect_lang(message.content):
                     return
-                cleaned_message = re.sub(r':[a-zA-Z0-9_]+:', '', message.content)
-                translated = await self.translator(message=cleaned_message)
-                cleaned_message = re.sub(r'<[@#]\d+>', '', cleaned_message)
-                await message.channel.send(f"`{cleaned_message}: {translated}`")
+                # ลบอีโมจิที่อยู่ในรูปแบบ :emoji_name: หรือ :number: หรือ <:number>
+                
+                translated = await self.translator(message=message.content)
+                cleaned_message = re.sub(r':[a-zA-Z0-9_]+:|<:\d+>', '', message.content)
+                await message.channel.send(f"jump to messasge > {message.jump_url} \n`{translated}`")
 
 
 
