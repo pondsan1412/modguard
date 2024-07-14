@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands, tasks
 import os
 import aiosqlite
+from modules import variables,function,switch_
+from command_files.translator import switch_button
 
 # call intents
 def call_intents():
@@ -21,8 +23,30 @@ class modguard(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=get_prefix, intents=call_intents())
 
+    async def check_old_switch(self):
+        channel = self.get_channel(variables.switch_translate_ch)
+        message = await channel.fetch_message(variables.default_switch_message_id)
+        if message.content == 'False':
+            switch_.tracking_message = False
+            
+        elif message.content =='True':
+           switch_.tracking_message = True
+           
+
+    
+    async def update_recent_button(self):
+        channel = self.get_channel(variables.switch_translate_ch)
+        message = await channel.fetch_message(variables.default_switch_message_id)
+        new_embed = discord.Embed(title='Auto Translate',color=discord.Colour.blue())
+        new_embed.add_field(name='Switch on-off for auto translate in channel',value=f'<#1260062822285709433>')
+        new_embed.add_field(name=f' ',value=f'Recent switch: **{function.switch_button.switch_return_string()}**',inline=False)
+        await message.edit(content=f'{switch_.tracking_message}',embed=new_embed,view=switch_button(superbot=self))
+        switch_button(superbot=self)
+
     async def on_ready(self):
         await self.tree.sync()
+        await self.check_old_switch()
+        await self.update_recent_button()
         async with aiosqlite.connect('prefixes.db') as db:
             await db.execute('''
                 CREATE TABLE IF NOT EXISTS prefixes (
@@ -33,6 +57,7 @@ class modguard(commands.Bot):
             await db.commit()
         self.check_prefix_channels.start()
         print(f'Logged in as {self.user}')
+        
         debugging_ch = discord.utils.get(self.get_all_channels(), name="「👾🛠」𝓓𝓮𝓫𝓾𝓰𝓰𝓲𝓷𝓰")
         if debugging_ch:
             await debugging_ch.send('hello world')
@@ -66,7 +91,7 @@ class modguard(commands.Bot):
                     print(f"Loaded extension: {module_name}")
                 except Exception as e:
                     print(f"Failed to load extension {module_name}: {e}")
-
+import secret_stuff
 import modules.function
 run_client = modguard()
 modguard_token = modules.function.pull_variables.fetch_token()

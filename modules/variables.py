@@ -39,6 +39,10 @@ discord_channel_network_community = {
     'reques_role':1260053662391341117
 
 }
+language_ch = 1260062822285709433
+switch_translate_ch = 1261928798861922374
+default_switch_message_id = 1261929501575610429
+
 
 #variables for string
 discord_channel = "None"
