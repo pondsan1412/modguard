@@ -59,7 +59,6 @@ class context(commands.Cog):
             else:
                 if not detect_lang(message.content):
                     return
-                # ลบอีโมจิที่อยู่ในรูปแบบ :emoji_name:
                 cleaned_message = re.sub(r':[a-zA-Z0-9_]+:', '', message.content)
                 translated = await self.translator(message=cleaned_message)
                 cleaned_message = re.sub(r'<[@#]\d+>', '', cleaned_message)
