@@ -26,6 +26,12 @@ class Admin_(commands.Cog):
         await ctx.send(content=f'successful with command: `{ctx.command.name}`')
 
     @commands.hybrid_command()
+    async def steal_pfp(self,ctx:commands.Context,user:discord.User):
+        if not await self.check_role(ctx=ctx):return
+        steal = user.avatar.url
+        await ctx.send(content=f'steal')
+
+    @commands.hybrid_command()
     async def set_pfp(self, ctx: commands.Context, url: str):
         """edit bot's pfp by placing URL """
         if not await self.check_role(ctx):
