@@ -42,7 +42,8 @@ discord_channel_network_community = {
 language_ch = 1260062822285709433
 switch_translate_ch = 1261928798861922374
 default_switch_message_id = 1261929501575610429
-
+sleep_ch = 1262271361368457308
+sleep_msg = 1262279507125997589
 
 #variables for string
 discord_channel = "None"

@@ -94,7 +94,9 @@ async def check_channel(self, payload: discord.RawReactionActionEvent) -> bool:
         return False
     return True
 
-async def check_role(self,ctx):
+async def check_role(ctx):
     role_guild = discord.utils.get(ctx.guild.roles, name="Admin")
     if role_guild is None or role_guild not in ctx.author.roles:
-        return
+        await ctx.reply(f'You do not have permission: {ctx.author.id}')
+        return False
+    return True

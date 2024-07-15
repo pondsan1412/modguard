@@ -109,8 +109,6 @@ class switch_button(discord.ui.View):
         self.bot = superbot
         self.embed_instance = embed()
 
-    
-
     @discord.ui.button(label='on', style=discord.ButtonStyle.green)
     async def setup_button_on(self, ctx: discord.Interaction, button: discord.ui.Button):
         function.switch_button.switch_tracking_translator(button='on')

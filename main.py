@@ -5,6 +5,7 @@ import aiosqlite
 from modules import variables,function,switch_
 from command_files.translator import switch_button
 from command_files.translator import embed as e
+from command_files.healthy import healthy_button,count_sleep_time
 class intents:
     def call_intents():
         intents = discord.Intents.default()
@@ -43,11 +44,20 @@ class modguard(commands.Bot):
         new_embed.set_image(url=f"{switch_switch}")
         await message.edit(content=f'{switch_.tracking_message}',embed=new_embed,view=switch_button(superbot=self))
         switch_button(superbot=self)
+    
+    async def update_sleep_button(self):
+        channel = self.get_channel(variables.sleep_ch)
+        message = await channel.fetch_message(variables.sleep_msg)
+        class_count = count_sleep_time()
+        view_button = healthy_button(class_count)
+        
+        await message.edit(view=view_button,content='Press the button to start or stop sleep tracking.')
 
     async def on_ready(self):
         await self.tree.sync()
         await self.check_old_switch()
         await self.update_recent_button()
+        await self.update_sleep_button()
         async with aiosqlite.connect('prefixes.db') as db:
             await db.execute('''
                 CREATE TABLE IF NOT EXISTS prefixes (
