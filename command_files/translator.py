@@ -8,6 +8,9 @@ from modules import function ,variables as v,switch_ as s
 import re
 
 class embed:
+    def __init__(self)->None:
+        pass
+
     async def check_switch_and_return_color(self):
         chk_sw_cl = s.tracking_message
         if chk_sw_cl != True:
@@ -25,9 +28,11 @@ class embed:
         return switch_
     
     async def embed_update(self):
-        embed = discord.Embed(title='Auto Translate',color=self.check_switch_and_return_color())
+        color = await self.check_switch_and_return_color()
+        switch = await self.check_bool_return_switch()
+        embed = discord.Embed(title='Auto Translate',color=color)
         embed.add_field(name='Automatic translates Toggle switch',value=f'<#1260062822285709433>')
-        embed.set_image(url=self.check_bool_return_switch())
+        embed.set_image(url=f"{switch}")
         return embed
     
 class context(commands.Cog):
@@ -102,18 +107,21 @@ class switch_button(discord.ui.View):
     def __init__(self,superbot):
         super().__init__(timeout=None)
         self.bot = superbot
+        self.embed_instance = embed()
 
     
 
     @discord.ui.button(label='on', style=discord.ButtonStyle.green)
     async def setup_button_on(self, ctx: discord.Interaction, button: discord.ui.Button):
         function.switch_button.switch_tracking_translator(button='on')
-        await ctx.response.edit_message(embed=self.embed_update(),content='True')
+        embed_update = await self.embed_instance.embed_update()
+        await ctx.response.edit_message(embed=embed_update,content='||False||')
 
     @discord.ui.button(label='off', style=discord.ButtonStyle.red)
     async def setup_button_off(self, ctx: discord.Interaction, button: discord.ui.Button):
         function.switch_button.switch_tracking_translator(button='off')
-        await ctx.response.edit_message(embed=self.embed_update(),content='False')
+        embed_update = await self.embed_instance.embed_update()
+        await ctx.response.edit_message(embed=embed_update,content='||True||')
 
 
 async def setup(bot):

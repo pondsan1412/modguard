@@ -22,6 +22,7 @@ async def get_prefix(bot, message):
 class modguard(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=get_prefix, intents=intents.call_intents())
+        self.embed_instance = e()
 
     async def check_old_switch(self):
         channel = self.get_channel(variables.switch_translate_ch)
@@ -35,8 +36,11 @@ class modguard(commands.Bot):
     async def update_recent_button(self):
         channel = self.get_channel(variables.switch_translate_ch)
         message = await channel.fetch_message(variables.default_switch_message_id)
-        new_embed = discord.Embed(title='Auto Translate',color=e.check_switch_and_return_color())
+        switch_color = await self.embed_instance.check_switch_and_return_color()
+        switch_switch = await self.embed_instance.check_bool_return_switch()
+        new_embed = discord.Embed(title='Auto Translate',color=switch_color)
         new_embed.add_field(name='Automatic translates Toggle switch',value=f'<#1260062822285709433>')
+        new_embed.set_image(url=f"{switch_switch}")
         await message.edit(content=f'{switch_.tracking_message}',embed=new_embed,view=switch_button(superbot=self))
         switch_button(superbot=self)
 
