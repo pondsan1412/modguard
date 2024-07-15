@@ -100,6 +100,7 @@ class steal_users_pfp_and_change_self_pfp(discord.ui.View):
                 return
         else:
             None
+        self.stop()
         
 async def setup(bot: commands.Bot):
     await bot.add_cog(Admin_(bot))
