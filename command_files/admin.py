@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands
 import aiohttp
-
+from modules import variables as v
+import requests
 class Admin_(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -30,6 +31,29 @@ class Admin_(commands.Cog):
         if not await self.check_role(ctx=ctx):return
         steal = user.avatar.url
         await ctx.send(content=f'{steal}')
+
+    @commands.hybrid_command()
+    async def pfp_mk(self,ctx:commands.Context,lounge_name):
+        """steal player's pfp from mk8dx lounge"""
+
+        def fetch_player_data(player_name):
+            url = v.mk8dx_api_url_name + player_name
+            respone = requests.get(url)
+            if respone.status_code == 200:
+                player_data = respone.json()
+                player_data["discordId"]
+                return player_data["discordId"]
+            
+        mk9dx = fetch_player_data(player_name=lounge_name)
+        dc_pfp = await self.bot.fetch_user(mk9dx)
+        embed_god = discord.Embed(title=f' ')
+        embed_god.add_field(name=' ',value=f'{dc_pfp.global_name}')
+        embed_god.set_image(url=f'{dc_pfp.avatar.url}')
+        await ctx.send(embed=embed_god)
+
+        
+
+        
 
     @commands.hybrid_command()
     async def set_pfp(self, ctx: commands.Context, url: str):

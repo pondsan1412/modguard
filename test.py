@@ -1,15 +1,13 @@
-from modules import function
-translated = 'สวัสดีครับสวัสดีครับ @ModGuard  :pepostare: '
-extracted, remaining = function.message.extract_message(message=translated)
-extracted_emoji, remaining_emoji = function.message.extract_custom_emoji(message=remaining)
-check_bool_remaining = function.convert_boolean(text=remaining)
-check_bool_extracted = function.convert_boolean(text=extracted)
+from modules import variables as v
+import requests
+import json
 
-def check():
-    if extracted_emoji == None and remaining_emoji == None:
-        return
-    if check_bool_extracted == None:
-       print(extracted,remaining_emoji ,extracted_emoji)
-   
-
-check()
+def fetch_player_data(player_name):
+    url = v.mk8dx_api_url_name + player_name
+    respone = requests.get(url)
+    if respone.status_code == 200:
+        player_data = respone.json()
+        player_data["discordId"]
+        return player_data["discordId"]
+    
+print(fetch_player_data(player_name='nissan'))

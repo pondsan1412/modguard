@@ -45,6 +45,7 @@ default_switch_message_id = 1261929501575610429
 sleep_ch = 1262271361368457308
 sleep_msg = 1262279507125997589
 
+mk8dx_api_url_name = 'https://www.mk8dx-lounge.com/api/player?name='
 #variables for string
 discord_channel = "None"
 #variables for integer
