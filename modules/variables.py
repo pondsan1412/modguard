@@ -50,3 +50,7 @@ discord_channel = "None"
 discord_channel_int = 0
 #variables for boolean
 discord_channel_output = False
+
+#url
+switch_on = 'https://cdn.discordapp.com/attachments/960467344826720277/1262091480307208253/Toggle_Switch_ON.png?ex=669555c9&is=66940449&hm=27b0abc674ce26008ede2c8e26652b336692c8858bf19bcc2c0e636683ea92a3&'
+switch_off = 'https://cdn.discordapp.com/attachments/960467344826720277/1262091563345903646/Toggle_Switch_OFF.png?ex=669555dd&is=6694045d&hm=14ffed3463c289c8566275ef1285b94ed5e93d13a09f9d5cefde20d566dbb2b2&'

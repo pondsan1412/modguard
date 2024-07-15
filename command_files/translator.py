@@ -4,9 +4,32 @@ from discord import app_commands,Embed
 from easygoogletranslate import EasyGoogleTranslate
 from googletrans import Translator
 import discord.utils
-from modules import function
-
+from modules import function ,variables as v,switch_ as s
 import re
+
+class embed:
+    async def check_switch_and_return_color(self):
+        chk_sw_cl = s.tracking_message
+        if chk_sw_cl != True:
+            embed_color = discord.Colour.red()
+        else:
+            embed_color = discord.Colour.green()
+        return embed_color
+    
+    async def check_bool_return_switch(self):
+        chk_sw_cl = s.tracking_message
+        if chk_sw_cl != True:
+            switch_ = v.switch_off
+        else:
+            switch_ = v.switch_on
+        return switch_
+    
+    async def embed_update(self):
+        embed = discord.Embed(title='Auto Translate',color=self.check_switch_and_return_color())
+        embed.add_field(name='Automatic translates Toggle switch',value=f'<#1260062822285709433>')
+        embed.set_image(url=self.check_bool_return_switch())
+        return embed
+    
 class context(commands.Cog):
     def __init__(self, bot:commands.Bot):
         self.bot = bot
@@ -17,7 +40,7 @@ class context(commands.Cog):
         self.bot.tree.add_command(self.ctx_menu)
 
     async def cog_unload(self) -> None:
-        self.bot.tree.remove_command(self.ctx_menu.name, type=self.ctx_menu.type)
+        self.bot.tree.remove_command(self.ctx_menu.name,ype=self.ctx_menu.type)
 
     async def tl(self,i:discord.Interaction, msg:discord.Message):
         translator = EasyGoogleTranslate(
@@ -80,11 +103,7 @@ class switch_button(discord.ui.View):
         super().__init__(timeout=None)
         self.bot = superbot
 
-    def embed_update(self):
-        embed = discord.Embed(title='Auto Translate',color=discord.Colour.blue())
-        embed.add_field(name='Switch on-off for auto translate in channel',value=f'<#1260062822285709433>')
-        embed.add_field(name=f' ',value=f'Recent switch: **{function.switch_button.switch_return_string()}**',inline=False)
-        return embed
+    
 
     @discord.ui.button(label='on', style=discord.ButtonStyle.green)
     async def setup_button_on(self, ctx: discord.Interaction, button: discord.ui.Button):

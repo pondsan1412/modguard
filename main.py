@@ -4,14 +4,14 @@ import os
 import aiosqlite
 from modules import variables,function,switch_
 from command_files.translator import switch_button
-
-# call intents
-def call_intents():
-    intents = discord.Intents.default()
-    intents.message_content = True
-    intents.members = True
-    intents.presences = True
-    return intents
+from command_files.translator import embed as e
+class intents:
+    def call_intents():
+        intents = discord.Intents.default()
+        intents.message_content = True
+        intents.members = True
+        intents.presences = True
+        return intents
 
 async def get_prefix(bot, message):
     async with aiosqlite.connect('prefixes.db') as db:
@@ -21,23 +21,22 @@ async def get_prefix(bot, message):
 
 class modguard(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=get_prefix, intents=call_intents())
+        super().__init__(command_prefix=get_prefix, intents=intents.call_intents())
 
     async def check_old_switch(self):
         channel = self.get_channel(variables.switch_translate_ch)
         message = await channel.fetch_message(variables.default_switch_message_id)
-        if message.content == 'False':
+        if message.content == '||False||':
             switch_.tracking_message = False
             
-        elif message.content =='True':
+        elif message.content =='||True||':
            switch_.tracking_message = True
            
     async def update_recent_button(self):
         channel = self.get_channel(variables.switch_translate_ch)
         message = await channel.fetch_message(variables.default_switch_message_id)
-        new_embed = discord.Embed(title='Auto Translate',color=discord.Colour.blue())
-        new_embed.add_field(name='Switch on-off for auto translate in channel',value=f'<#1260062822285709433>')
-        new_embed.add_field(name=f' ',value=f'Recent switch: **{function.switch_button.switch_return_string()}**',inline=False)
+        new_embed = discord.Embed(title='Auto Translate',color=e.check_switch_and_return_color())
+        new_embed.add_field(name='Automatic translates Toggle switch',value=f'<#1260062822285709433>')
         await message.edit(content=f'{switch_.tracking_message}',embed=new_embed,view=switch_button(superbot=self))
         switch_button(superbot=self)
 
