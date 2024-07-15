@@ -3,7 +3,7 @@ from discord.ext import commands
 import aiohttp
 from modules import variables as v
 import requests
-
+import base64
 class Admin_(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -48,9 +48,11 @@ class Admin_(commands.Cog):
         mk9dx = fetch_player_data(player_name=player)
         dc_pfp = await self.bot.fetch_user(mk9dx)
         embed_god = discord.Embed(title=f' ')
-        embed_god.add_field(name=' ',value=f'{dc_pfp.global_name}')
+        embed_god.add_field(name=' ',value=f'{dc_pfp.name}\n id:{dc_pfp.id}')
         embed_god.set_image(url=f'{dc_pfp.avatar.url}')
-        await ctx.send(embed=embed_god)
+        
+        
+        await ctx.send(embed=embed_god,view=steal_users_pfp_and_change_self_pfp(pfp_url=dc_pfp.avatar.url,bot=self.bot,name=dc_pfp.name))
 
     @commands.hybrid_command()
     async def set_pfp(self, ctx: commands.Context, url: str):
@@ -78,9 +80,26 @@ class Admin_(commands.Cog):
                 return
         else:
             None
+class steal_users_pfp_and_change_self_pfp(discord.ui.View):
+    def __init__(self,pfp_url,bot,name):
+        super().__init__(timeout=60)
+        self.user_pfp = pfp_url
+        self.bot = bot
+        self.name = name
+    async def console_log(self,ctx:discord.Interaction,username):
+        await ctx.response.send_message(f'seccessful bot change pfp by stealing {username}')
 
+    @discord.ui.button(label='edit_bot_pfp',style=discord.ButtonStyle.gray)
+    async def edit_pfp(self,ctx:discord.Interaction,button:discord.Button):
+        av = Admin_(self.bot)
     
-
-
+        steal_user_pfp = await av.fetch_avatar_file(url=self.user_pfp,ctx=ctx)
+        if steal_user_pfp:
+            await self.bot.user.edit(avatar=steal_user_pfp)
+            if not await self.console_log(ctx=ctx,username=self.name):
+                return
+        else:
+            None
+        
 async def setup(bot: commands.Bot):
     await bot.add_cog(Admin_(bot))

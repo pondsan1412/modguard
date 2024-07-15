@@ -50,7 +50,6 @@ class modguard(commands.Bot):
         message = await channel.fetch_message(variables.sleep_msg)
         class_count = count_sleep_time()
         view_button = healthy_button(class_count)
-        
         await message.edit(view=view_button,content='Press the button to start or stop sleep tracking.')
 
     async def on_ready(self):
