@@ -8,7 +8,7 @@ class ReactionRole(commands.Cog):
         self.bot = bot
         self.message_id = message_id
         
-    @commands.hybrid_command(no_pm=True)()
+    @commands.hybrid_command()
     async def add_single_emoji(self, ctx:commands.Context,message_id:int, *,which_emoji:str ):
         role_guild = discord.utils.get(ctx.guild.roles, name="Admin")
         if role_guild is None or role_guild not in ctx.author.roles:
@@ -17,7 +17,7 @@ class ReactionRole(commands.Cog):
         message = await ctx.fetch_message(message_id)
         await message.add_reaction(which_emoji)
 
-    @commands.hybrid_command(no_pm=True)()
+    @commands.hybrid_command()
     async def set_emoji(self, ctx: commands.Context, message_id: int):
         """
         Setup reaction roles for a specific message.
