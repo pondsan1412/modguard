@@ -94,7 +94,7 @@ class context(commands.Cog):
                 if extracted == ":pepost:":
                     return
                 else:
-                    await message.channel.send(f"jump to messasge > {message.jump_url} \n{extracted}`{remaining_emoji}`")
+                    await message.channel.send(f"{message.author.name}: {extracted} {remaining_emoji}")
 
     @commands.hybrid_command()
     async def switch_button_for_translator(self,ctx:commands.Context):

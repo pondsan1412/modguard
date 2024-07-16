@@ -5,8 +5,10 @@ import aiosqlite
 from modules import variables,function,switch_
 from command_files.translator import switch_button
 from command_files.translator import embed as e
-from command_files.healthy import healthy_button,count_sleep_time
+from command_files.healthy import button_sleeptimer
 
+
+    
 class intents:
     def call_intents():
         intents = discord.Intents.default()
@@ -19,6 +21,7 @@ class modguard(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=commands.when_mentioned_or("!"), intents=intents.call_intents())
         self.embed_instance = e()
+        
 
     async def check_old_switch(self):
         channel = self.get_channel(variables.switch_translate_ch)
@@ -37,23 +40,18 @@ class modguard(commands.Bot):
         new_embed = discord.Embed(title='Auto Translate',color=switch_color)
         new_embed.add_field(name='Automatic translates Toggle switch',value=f'<#1260062822285709433>')
         new_embed.set_image(url=f"{switch_switch}")
-        await message.edit(content=f'{switch_.tracking_message}',embed=new_embed,view=switch_button(superbot=self))
+        await message.edit(content=f'||{switch_.tracking_message}||',embed=new_embed,view=switch_button(superbot=self))
         switch_button(superbot=self)
-    
-    async def update_sleep_button(self):
-        channel = self.get_channel(variables.sleep_ch)
-        message = await channel.fetch_message(variables.sleep_msg)
-        class_count = count_sleep_time()
-        view_button = healthy_button(class_count)
-        await message.edit(view=view_button,content='Press the button to start or stop sleep tracking.')
+        
 
     async def on_ready(self):
         await self.tree.sync()
         await self.check_old_switch()
         await self.update_recent_button()
-        await self.update_sleep_button()
-        print(f'Logged in as {self.user}')
         
+        #await self.update_sleep_button()
+        print(f'Logged in as {self.user}')
+        print('coution: please use command !reset everytime you re-online bot. this is for update every button to not make it messed up')
         debugging_ch = discord.utils.get(self.get_all_channels(), name="「👾🛠」𝓓𝓮𝓫𝓾𝓰𝓰𝓲𝓷𝓰")
         if debugging_ch:
             await debugging_ch.send('hello world')

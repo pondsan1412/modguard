@@ -1,5 +1,5 @@
-import main
+import modules.client as client
 import asyncio
 
 async def run():
-    main.run_client
+    client.run_client
