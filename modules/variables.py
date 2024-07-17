@@ -44,7 +44,7 @@ switch_translate_ch = 1261928798861922374
 default_switch_message_id = 1261929501575610429
 sleep_ch = 1262642481414148106
 sleep_msg = 1262643729727229972
-
+loading_system = "https://cdn.discordapp.com/attachments/1263069693904687195/1263071322691342397/circle-1700_128.gif?ex=6698e656&is=669794d6&hm=e33295b14bc9c2061d0ae029a7bb030e6baf305dc2a2ba98f6f1cf3ac002c6c6&"
 mk8dx_api_url_name = 'https://www.mk8dx-lounge.com/api/player?name='
 #variables for string
 discord_channel = "None"
