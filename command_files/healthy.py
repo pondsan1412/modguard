@@ -26,7 +26,7 @@ class healthy_commands(commands.Cog):
         if not await check_role(ctx=ctx):
             return
         msg_ch = v.discord_channel_network_community['debugging_channel']
-        channel_sleep = ctx.guild.get_channel(msg_ch)
+        channel_sleep = ctx.guild.get_channel(1262642481414148106)
         new_button = await channel_sleep.fetch_message(1262699824864690259)
         button = button_sleeptimer(ctx=ctx)
         send_again = await new_button.edit(view=button,content=f'Press button to start your sleep \nabout sleep result will save in <#1262644348743454740>')
