@@ -4,7 +4,24 @@ import secret_stuff
 from modules import switch_,variables
 import re
 import discord
+import aiohttp
+from typing import List
+from discord import app_commands
 
+            
+async def fetch_player_stats_short(nameplayer):
+    async with aiohttp.ClientSession() as session:
+        async with session.get("https://www.mk8dx-lounge.com/api/player/list") as response:
+            if response.status == 200:
+                players_stats = await response.json()
+                for player in players_stats['players']:
+                    if 'name' in player and nameplayer.lower() in player['name'].lower():
+                        discord_id = player.get('discordId')
+                        mkcId = player.get('mkcId')
+                        mmr = player.get('mmr')
+                        eventsplayed = player.get('eventsPlayed')
+                        return nameplayer,discord_id,mkcId,mmr,eventsplayed
+                    
 def check_string(variable):
     if isinstance(variable, str):
         return True
@@ -100,3 +117,19 @@ async def check_role(ctx):
         await ctx.reply(f'You do not have permission: {ctx.author.id}')
         return False
     return True
+
+async def player_load(
+        self,
+        interaction: discord.Interaction,
+        current: str,
+    ) -> List[app_commands.Choice[str]]:
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://www.mk8dx-lounge.com/api/player/list") as response:
+                if response.status == 200:
+                    players_data = await response.json()
+                    player_names = [player['name'] for player in players_data['players']]
+                    filtered_names = [name for name in player_names if current.lower() in name.lower()]
+                    return [app_commands.Choice(name=name, value=name) for name in filtered_names][:25]
+                else:
+                    # Handle API error response
+                    return []

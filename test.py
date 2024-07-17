@@ -1,16 +1,17 @@
 import aiohttp
 import asyncio
 
-async def lounge_api_full():
+async def fetch_player_stats_short(nameplayer):
     async with aiohttp.ClientSession() as session:
         async with session.get("https://www.mk8dx-lounge.com/api/player/list") as response:
             if response.status == 200:
-                players_data = await response.json()
-                return [player['name'] for player in players_data['players'] if 'name' in player]
+                players_stats = await response.json()
+                for player in players_stats['players']:
+                    if 'name' in player and nameplayer.lower() in player['name'].lower():
+                        discord_id = player.get('discordId')
+                        mkcId = player.get('mkcId')
+                        mmr = player.get('mmr')
+                        eventsplayed = player.get('eventsPlayed')
+                        print( nameplayer,discord_id,mkcId,mmr,eventsplayed)
 
-async def main():
-    discord_ids = await lounge_api_full()
-    print(discord_ids)
-
-if __name__ == "__main__":
-    asyncio.run(main())
+asyncio.run(fetch_player_stats_short(nameplayer='nissan'))
