@@ -71,4 +71,4 @@ class modguard(commands.Bot):
 import modules.function
 run_client = modguard()
 modguard_token = modules.function.pull_variables.fetch_token()
-run_client.run(reconnect=True, root_logger=False, token="MTA3MjQ2MzI2MTYxOTk4NjU1Mw.Gn77gP.yWruP9Gr_2iqNUC8k0VItxTCsSfmj4KpgkJNOg")
+run_client.run(reconnect=True, root_logger=False, token=modguard_token)
