@@ -6,7 +6,10 @@ from googletrans import Translator
 import discord.utils
 from modules import function ,variables as v,switch_ as s
 import re
-
+from discord.app_commands import Choice
+from discord import app_commands
+from googletrans import Translator,LANGUAGES
+from typing import List
 class embed:
     def __init__(self)->None:
         pass
@@ -102,6 +105,48 @@ class context(commands.Cog):
             return
         
         await ctx.send(view=switch_button())
+
+ 
+
+    async def rps_autocomplete(self,
+        interaction: discord.Interaction,
+        current: str,
+    ) -> List[app_commands.Choice[str]]:
+        all_languages = LANGUAGES
+        
+        choices = all_languages
+        return [
+            app_commands.Choice(name=choice, value=choice)
+            for choice in choices if current.lower() in choice.lower()
+        ][:25]
+
+    
+    @app_commands.command()
+    @app_commands.autocomplete(output_lang = rps_autocomplete)
+    @app_commands.describe(output_lang='Select lang code or type your lang code like en or de', texts='Type anything to translate to')
+    async def translate(self, i: discord.Interaction,  output_lang:str,texts:str):
+        """Translate command that allows selecting output language"""
+        
+        if i:
+            await i.response.defer(thinking=True, ephemeral=True)
+
+        def translate(text):
+            tl = EasyGoogleTranslate(source_language='auto', target_language=output_lang)
+            detect_source_lang = Translator()
+            detected_source = detect_source_lang.detect(text).lang
+            detected_target = detect_source_lang.detect(output_lang).lang
+            translated_text = tl.translate(text)
+            return translated_text, detected_source, detected_target
+        
+        if texts:
+            translated_text, detected_source, detected_target = translate(text=texts)
+            embed_created = discord.Embed(title=f'{detected_source} to {detected_target}')
+            embed_created.add_field(name='Source text', value=f'{texts}', inline=False)
+            embed_created.add_field(name='Translated text', value=f'{translated_text}', inline=False)
+            embed_created.set_author(name=f'{i.user.name}', url=f'https://discord.com/users/{i.user.id}', icon_url=i.user.avatar.url)
+            await i.followup.send(embed=embed_created, ephemeral=True)
+
+        
         
 class switch_button(discord.ui.View):
     def __init__(self,superbot):

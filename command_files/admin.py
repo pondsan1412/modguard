@@ -4,6 +4,10 @@ import aiohttp
 from modules import variables as v
 import requests
 import base64
+from discord import app_commands
+from typing import List
+from utils import lounge_data, mkc_data
+
 class Admin_(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -33,10 +37,27 @@ class Admin_(commands.Cog):
         steal = user.avatar.url
         await ctx.send(content=f'{steal}')
 
+    async def fetch_player_name(
+        self,
+        interaction: discord.Interaction,
+        current: str,
+    ) -> List[app_commands.Choice[str]]:
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://www.mk8dx-lounge.com/api/player/list") as response:
+                if response.status == 200:
+                    players_data = await response.json()
+                    player_names = [player['name'] for player in players_data['players']]
+                    filtered_names = [name for name in player_names if current.lower() in name.lower()]
+                    return [app_commands.Choice(name=name, value=name) for name in filtered_names][:25]
+                else:
+                    # Handle API error response
+                    return []
     
-    @commands.hybrid_command()
+    @app_commands.command()
+    @app_commands.describe(player='input players lounge name')
+    @app_commands.autocomplete(player=fetch_player_name)
     async def pfp_mk(self,ctx:commands.Context,player:str=None):
-        """steal player's pfp from mk8dx lounge"""
+        """steal player's discord pfp using their lounge name"""
         def fetch_player_data(player_name):
             url = v.mk8dx_api_url_name + player_name
             respone = requests.get(url)
