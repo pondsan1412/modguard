@@ -31,6 +31,8 @@ class healthy_commands(commands.Cog):
         button = button_sleeptimer(ctx=ctx)
         send_again = await new_button.edit(view=button,content=f'Press button to start your sleep \nabout sleep result will save in <#1262644348743454740>')
         button.message = send_again
+        if ctx:
+            await ctx.send("reset done",delete_after=5)
         
     
     
