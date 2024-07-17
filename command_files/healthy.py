@@ -22,7 +22,7 @@ class healthy_commands(commands.Cog):
     
     @commands.hybrid_command()
     async def reset(self,ctx:commands.Context):
-        """__COUTION__ this command is for admin only! """
+        """**__CAUTION__** this command is for admin only!"""
         if not await check_role(ctx=ctx):
             return
         msg_ch = v.discord_channel_network_community['debugging_channel']
