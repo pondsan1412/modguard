@@ -94,7 +94,7 @@ class button_sleeptimer(discord.ui.View):
         await self.update_message()
         await interaction.response.edit_message(view=self)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(minutes=3)
     async def update_message_task(self):
         await self.update_message()
 
