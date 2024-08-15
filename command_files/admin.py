@@ -6,7 +6,7 @@ import requests
 import base64
 from discord import app_commands
 from typing import List
-from utils import lounge_data, mkc_data
+import asyncio
 
 class Admin_(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -101,6 +101,18 @@ class Admin_(commands.Cog):
                 return
         else:
             None
+
+    @commands.hybrid_command()
+    async def remove_(self,ctx:commands.Context, message_id):
+        try:
+            message = await ctx.channel.fetch_message(message_id)
+            await message.delete()
+        except discord.NotFound:
+            pass  # Do nothing if the message is not found
+        except discord.Forbidden:
+            pass  # Do nothing if the bot doesn't have permission
+        except discord.HTTPException:
+            pass  # Do nothing if there's an HTTP error
 class steal_users_pfp_and_change_self_pfp(discord.ui.View):
     def __init__(self,pfp_url,bot,name):
         super().__init__(timeout=60)

@@ -35,6 +35,16 @@ class General(commands.Cog):
             message = await ctx.send(content=f'{v.loading_system}')
             await asyncio.sleep(random_time())
             await message.edit(content=f'{random_thing}')
+    @commands.command(name='invite')
+    async def invite(self,ctx:commands.Context):
+        guild = discord.utils.get(self.bot.guilds, name='Network Community')
+        guildid = self.bot.get_guild(guild.id)
+        if guildid is None:
+            return
+        
+        channel = guildid.text_channels[0]
+        invite = await channel.create_invite(max_age=0,max_uses=0)
 
+        await ctx.send(f"{invite.url}")
 async def setup(bot):
    await bot.add_cog(General(bot))

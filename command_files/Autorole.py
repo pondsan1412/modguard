@@ -9,9 +9,16 @@ class Autorole(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self,member:discord.Member):
         """keep an eyes when people join server and autorole 'Member' to them"""
-        bot_guild = discord.utils.get(self.bot.guilds, name='Network Community')
-        for guild in self.bot.guilds:
-            if guild.name == 'Network Community':
-                
+        if member.bot:
+            gave_bot = discord.utils.get(member.guild.roles, name="bots")
+            if gave_bot:
+                await member.add_roles(gave_bot)
+            else:
+                return
+        role = discord.utils.get(member.guild.roles, name="Member")
+        if role:
+            await member.add_roles(role)
+        else:
+            return
         
-        role_check = discord.utils.get(self.bot.)
+        

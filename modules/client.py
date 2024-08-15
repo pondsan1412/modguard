@@ -71,6 +71,7 @@ class modguard(commands.Bot):
 import modules.function
 from keep_alive import keep_alive
 run_client = modguard()
+import secret_stuff
 keep_alive()
 keep_alive
 modguard_token = modules.function.pull_variables.fetch_token()
