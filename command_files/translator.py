@@ -1,15 +1,12 @@
 import discord
 from discord.ext import commands
-from discord import app_commands,Embed
+from discord import app_commands
 from easygoogletranslate import EasyGoogleTranslate
-from googletrans import Translator
 import discord.utils
 from modules import function ,variables as v,switch_ as s
-import re
-from discord.app_commands import Choice
-from discord import app_commands
 from googletrans import Translator,LANGUAGES
 from typing import List
+
 class embed:
     def __init__(self)->None:
         pass
@@ -63,17 +60,53 @@ class context(commands.Cog):
         trans = EasyGoogleTranslate(source_language='auto', target_language='en', timeout=None)
         translated = trans.translate(text=message)
         return translated
+    
+    #new function translator
+    async def trans(self,message:str) -> str:
+        trans = Translator()
+        translated = trans.translate(
+            text=message,
+            dest='en',
+            src='auto'
+        )
+        return translated.text
 
     # ตรวจจับภาษาต้นทางแบบออโต้ และแปลภาษาออกไปตามที่รับค่ามาจาก emoji
     async def auto_trans(self, message: str, lang: str):
-        trans = EasyGoogleTranslate(
-            source_language='auto',
-            target_language=lang,
-            timeout=None
+        trans = Translator()
+        translator = trans.translate(
+            text=message,
+            src='auto',
+            dest=lang
         )
-        return trans.translate(text=message)
+        return translator.text
+    
+    #ต้นทางภาษาไปสู่ english
+    async def src_to_en(self, message: str, src: str):
+        try:
+            trans = Translator()
+            translator = trans.translate(
+                text=message,
+                src=src,
+                dest='en'
+            )
+            return translator.text
+        except Exception as e:
+            print(f"Translation error: {e}")
+            return None
         
+    async def handle_translation(self, message):
+        if message.content.startswith('.'):
+            src, _, trans = message.content[1:].partition(' ')  # ตัดจุดนำหน้าออกและแบ่ง src กับข้อความ
 
+            if not src or not trans:  # ตรวจสอบว่าคำสั่งถูกต้อง
+                await message.channel.send("Invalid command format. Please use .<language_code> <text>.")
+            else:
+                translated_text = await self.src_to_en(message=trans, src=src)
+                if translated_text:
+                    await message.channel.send(translated_text)
+                else:
+                    await message.channel.send("Translation failed or language not supported.")
 
     @commands.Cog.listener()
     async def on_message(self,message:discord.Message):
@@ -93,14 +126,19 @@ class context(commands.Cog):
             if function.switch_button.check_switch() != True:
                 return
             else:
+                 #เรียกใช้ฟังชั่น handle message
+                await self.handle_translation(message)
                 if not detect_lang(message.content):
                     return
                 
                 # ลบอีโมจิที่อยู่ในรูปแบบ :emoji_name: หรือ :number: หรือ <:number>
-                if message.content.startswith("!"):return
-                translated = await self.translator(message=message.content)
+                match True:
+                    case _ if message.content.startswith("!"):return
+                
+
+                translated = await self.trans(message=message.content)
                 extracted, remaining = function.message.extract_message(message=translated)
-                print(extracted,remaining)
+                print(extracted,remaining, translated)
                 
                 extracted_emoji, remaining_emoji = function.message.extract_custom_emoji(message=remaining)
                 if extracted == ":pepost:":
@@ -150,19 +188,19 @@ class context(commands.Cog):
         
         if reaction.emoji in flag_emojis:
             lang = flag_emojis[reaction.emoji]
-            translated_text = await self.auto_trans(
+            translated_text = await self.src_to_en(
                 message=message.content,
-                lang=lang
+                src=lang
             )
             await message.channel.send(f'{reaction.emoji}: {translated_text} ')
 
 
     @commands.hybrid_command()
     async def switch_button_for_translator(self,ctx:commands.Context):
-        if not await function.check_role(self=self,ctx=ctx):
+        if not await function.check_role(ctx=ctx):
             return
         
-        await ctx.send(view=switch_button())
+        await ctx.send(view=switch_button(superbot=self.bot))
 
  
 

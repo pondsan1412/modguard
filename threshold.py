@@ -1,9 +1,5 @@
-def switch_case(value):
-    switcher = {
-        1: "One",
-        2: "Two",
-        3: "Three"
-    }
-    return switcher.get(value, "Other")
+from googletrans import Translator
 
-print(switch_case(2))  # Output: Two
+trans = Translator()
+translated = trans.translate(text='MEC',dest='en',src='fr')
+print(translated.text)
