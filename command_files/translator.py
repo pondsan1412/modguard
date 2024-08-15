@@ -144,6 +144,7 @@ class context(commands.Cog):
             else:
                  #เรียกใช้ฟังชั่น handle message
                 await self.handle_translation(message)
+                await self.embed_trans(message)
                 #embed
                 
                 if not detect_lang(message.content):
