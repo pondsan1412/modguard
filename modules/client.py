@@ -75,4 +75,4 @@ import secret_stuff
 keep_alive()
 keep_alive
 modguard_token = modules.function.pull_variables.fetch_token()
-run_client.run(reconnect=True, root_logger=False, token=secret_stuff.debug)
+run_client.run(reconnect=True, root_logger=False, token=modguard_token)    
