@@ -1,5 +1,6 @@
 discord.py
 aiosqlite
-easygoogletranslate
-googletrans==4.0.0-rc1
+langdetect
 flask
+deepl
+googletrans==4.0.0-rc1

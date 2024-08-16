@@ -1,4 +1,4 @@
-#!c:\Users\GAMEs\discord_bot\modguard\.venv\Scripts\python.exe
+#!d:\bot\modguard\.venv\Scripts\python.exe
 # -*- coding: utf-8 -*-
 import argparse
 import sys
