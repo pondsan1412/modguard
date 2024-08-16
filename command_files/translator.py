@@ -125,7 +125,7 @@ class context(commands.Cog):
                     embed = discord.Embed(title=f"{src} to en",color=discord.Color.yellow())
                     embed.add_field(name=f"{flag}",value=f"```{trans}```",inline=False)
                     embed.add_field(name=f":flag_us: ",value=f"```{translated_text}```",inline=False)
-                    embed.set_footer(text='google translate reverse engineering',  icon_url='https://cdn-icons-png.flaticon.com/512/281/281776.png')
+                    embed.set_footer(text="Using Deepl APIs paid plan",  icon_url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAda1O--9wiWb9ksXlx78bvTL6nz4wiRVAQw&s')
                     await message.channel.send(embed=embed)
                 else:                
                     await message.channel.send("Translation failed or language not supported.")
@@ -137,7 +137,7 @@ class context(commands.Cog):
         if lang_detected == 'en':
             return
         else:
-            print(f"คืนค่าเป็น: {lang_detected}")
+            print(f"คืนค่าเป็น: {lang_detected.lang}")
             return lang_detected.lang
             
     @commands.Cog.listener()
