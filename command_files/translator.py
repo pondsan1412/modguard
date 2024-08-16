@@ -1,11 +1,13 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from easygoogletranslate import EasyGoogleTranslate
+import deepl
 import discord.utils
 from modules import function ,variables as v,switch_ as s
-from googletrans import Translator,LANGUAGES
 from typing import List
+import secret_stuff
+from googletrans import Translator
+trans = deepl.Translator(auth_key=secret_stuff.api_keys)
 
 class embed:
     def __init__(self)->None:
@@ -48,47 +50,49 @@ class context(commands.Cog):
         self.bot.tree.remove_command(self.ctx_menu.name,ype=self.ctx_menu.type)
 
     async def tl(self,i:discord.Interaction, msg:discord.Message):
-        translator = EasyGoogleTranslate(
-        source_language='auto',
-        target_language='en',
-        timeout=None
+        result = trans.translate_text(
+            text=msg.content,
+            source_lang='auto',
+            target_lang='en-us'
         )
-        result = translator.translate(text=msg.content)
-        await i.response.send_message(result)
+
+        await i.response.send_message(result.text)
 
     async def translator(self, message: str) -> str:
-        trans = EasyGoogleTranslate(source_language='auto', target_language='en', timeout=None)
-        translated = trans.translate(text=message)
-        return translated
+        
+        translated = trans.translate_text(
+            text=message,
+            source_lang='auto',
+            target_lang='en-us'
+        )
+        return translated.text
     
     #new function translator
     async def trans(self,message:str) -> str:
-        trans = Translator()
-        translated = trans.translate(
+       
+        translated = trans.translate_text(
             text=message,
-            dest='en',
-            src='auto'
+            target_lang='en-us',
+            source_lang='auto'
         )
         return translated.text
 
     # ตรวจจับภาษาต้นทางแบบออโต้ และแปลภาษาออกไปตามที่รับค่ามาจาก emoji
     async def auto_trans(self, message: str, lang: str):
-        trans = Translator()
-        translator = trans.translate(
+        translator = trans.translate_text(
             text=message,
-            src='auto',
-            dest=lang
+            source_lang='auto',
+            target_lang=lang
         )
         return translator.text
     
     #ต้นทางภาษาไปสู่ english
     async def src_to_en(self, message: str, src: str):
         try:
-            trans = Translator()
-            translator = trans.translate(
+            translator = trans.translate_text(
                 text=message,
-                src=src,
-                dest='en'
+                source_lang=src,
+                target_lang='en-us'
             )
             return translator.text
         except Exception as e:
@@ -129,8 +133,8 @@ class context(commands.Cog):
         if message.author == self.bot.user: return
         
         def detect_lang(message_content:str)->str:
-            trans = Translator()
-            lang_detected = trans.detect(message_content).lang
+            detect = Translator()
+            lang_detected = detect.detect(message_content).lang
             if lang_detected == 'en':
                 return
             else:
@@ -233,56 +237,7 @@ class context(commands.Cog):
         
         await ctx.send(view=switch_button(superbot=self.bot))
 
- 
-
-    async def rps_autocomplete(self,
-        interaction: discord.Interaction,
-        current: str,
-    ) -> List[app_commands.Choice[str]]:
-        all_languages = LANGUAGES
-        
-        choices = all_languages
-        return [
-            app_commands.Choice(name=choice, value=choice)
-            for choice in choices if current.lower() in choice.lower()
-        ][:25]
-
-    
-    @app_commands.command()
-    @app_commands.autocomplete(output_lang = rps_autocomplete)
-    @app_commands.describe(output_lang='Select lang code or type your lang code like en or de', texts='Type anything to translate to')
-    async def translate(self, i: discord.Interaction,  output_lang:str,texts:str):
-        """Translate command that allows selecting output language"""
-        
-        if i:
-            await i.response.defer(thinking=True, ephemeral=True)
-
-        def translate(text):
-            tl = EasyGoogleTranslate(source_language='auto', target_language=output_lang)
-            detect_source_lang = Translator()
-            detected_source = detect_source_lang.detect(text).lang
-            detected_target = detect_source_lang.detect(output_lang).lang
-            translated_text = tl.translate(text)
-            return translated_text, detected_source, detected_target
-        
-        if texts:
-            translated_text, detected_source, detected_target = translate(text=texts)
-            embed_created = discord.Embed(title=f'{detected_source} to {detected_target}')
-            embed_created.add_field(name='Source text', value=f'{texts}', inline=False)
-            embed_created.add_field(name='Translated text', value=f'{translated_text}', inline=False)
-
-            def check_pfp():
-                if i.user.avatar.url is None:
-                    return 'https://static.vecteezy.com/system/resources/previews/024/983/914/original/simple-user-default-icon-free-png.png'
-                else:
-                    i.user.avatar.url
-
-            check_pfp_ = check_pfp()
-            embed_created.set_author(name=f'{i.user.name}', url=f'https://discord.com/users/{i.user.id}', icon_url=check_pfp_)
-            await i.followup.send(embed=embed_created, ephemeral=True)
-
-    
-        
+   
 class switch_button(discord.ui.View):
     def __init__(self,superbot):
         super().__init__(timeout=None)
