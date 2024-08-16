@@ -133,12 +133,12 @@ class context(commands.Cog):
     #ตรวจจับภาษาต้นทางแบบ auto
     def detect_lang(self,message_content:str)->str:
         detect = Translator()
-        lang_detected = detect.detect(text=message_content)
+        lang_detected = detect.detect(text=message_content).lang
         if lang_detected == 'en':
             return
         else:
-            print(f"คืนค่าเป็น: {lang_detected.lang}")
-            return lang_detected.lang
+            print(f"คืนค่าเป็น: {lang_detected}")
+            return lang_detected
             
     @commands.Cog.listener()
     async def on_message(self,message:discord.Message):
