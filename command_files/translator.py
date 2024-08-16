@@ -69,11 +69,12 @@ class context(commands.Cog):
     
     #new function translator
     async def trans(self,message:str) -> str:
-       
+        detect = self.detect_lang(message_content=message)
         translated = trans.translate_text(
             text=message,
             target_lang='en-us',
-            source_lang='auto'
+            source_lang=f"{detect}"
+            
         )
         return translated.text
 
@@ -126,19 +127,22 @@ class context(commands.Cog):
                     embed.add_field(name=f":flag_us: ",value=f"```{translated_text}```",inline=False)
                     embed.set_footer(text='google translate reverse engineering',  icon_url='https://cdn-icons-png.flaticon.com/512/281/281776.png')
                     await message.channel.send(embed=embed)
-                else:
+                else:                
                     await message.channel.send("Translation failed or language not supported.")
+    
+    #ตรวจจับภาษาต้นทางแบบ auto
+    def detect_lang(self,message_content:str)->str:
+        detect = Translator()
+        lang_detected = detect.detect(text=message_content)
+        if lang_detected == 'en':
+            return
+        else:
+            print(f"คืนค่าเป็น: {lang_detected}")
+            return lang_detected.lang
+            
     @commands.Cog.listener()
     async def on_message(self,message:discord.Message):
         if message.author == self.bot.user: return
-        
-        def detect_lang(message_content:str)->str:
-            detect = Translator()
-            lang_detected = detect.detect(message_content).lang
-            if lang_detected == 'en':
-                return
-            else:
-                return lang_detected
         
         #feature tracking message to translate
         language_ch = "「🌏💬」𝓛𝓪𝓷𝓰𝓾𝓪𝓰𝓮"
@@ -151,7 +155,7 @@ class context(commands.Cog):
                 await self.embed_trans(message)
                 #embed
                 
-                if not detect_lang(message.content):
+                if not self.detect_lang(message.content):
                     return
                 
                 # ลบอีโมจิที่อยู่ในรูปแบบ :emoji_name: หรือ :number: หรือ <:number>

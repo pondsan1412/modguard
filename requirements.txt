@@ -3,4 +3,4 @@ aiosqlite
 langdetect
 flask
 deepl
-googletrans
+googletrans==4.0.0-rc1
